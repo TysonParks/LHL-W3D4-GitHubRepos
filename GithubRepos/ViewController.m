@@ -12,6 +12,9 @@
 
 @property (weak, nonatomic) IBOutlet UITableView *myTableView;
 
+@property (strong, nonatomic) NSArray *repos;
+@property (strong, nonatomic) NSDictionary *repoDict;
+@property (strong, nonatomic) NSString *repoName;
 
 @end
 
@@ -38,7 +41,7 @@
         }
         
         NSError *jsonError = nil;
-        NSArray *repos = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError]; // 2
+        self.repos = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError]; // 2
         
         if (jsonError) { // 3
             // Handle the error
@@ -47,10 +50,10 @@
         }
         
         // If we reach this point, we have successfully retrieved the JSON from the API
-        for (NSDictionary *repo in repos) { // 4
-            
-            NSString *repoName = repo[@"name"];
-            NSLog(@"repo: %@", repoName);
+        for (NSDictionary *repo in self.repos) { // 4
+            self.repoDict = repo;
+            self.repoName = self.repoDict[@"name"];
+            NSLog(@"repo: %@", self.repoName);
         }
         
         
@@ -61,11 +64,11 @@
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+    return nil;
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    
+    return self.repoDict.count;
 }
 
 
