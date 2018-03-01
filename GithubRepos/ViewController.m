@@ -10,12 +10,16 @@
 
 @interface ViewController ()
 
+@property (weak, nonatomic) IBOutlet UITableView *myTableView;
+
+
 @end
 
 @implementation ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     
     NSURL *url = [NSURL URLWithString:@"https://api.github.com/users/TysonParks/repos"]; // 1
     NSURLRequest *urlRequest = [[NSURLRequest alloc] initWithURL:url]; // 2
@@ -53,5 +57,9 @@
     [dataTask resume]; // 6
 
 }
+
+
+
+
 
 @end
