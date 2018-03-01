@@ -25,6 +25,27 @@
     
     NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:urlRequest completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         
+        if (error) { // 1
+            // Handle the error
+            NSLog(@"error: %@", error.localizedDescription);
+            return;
+        }
+        
+        NSError *jsonError = nil;
+        NSArray *repos = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError]; // 2
+        
+        if (jsonError) { // 3
+            // Handle the error
+            NSLog(@"jsonError: %@", jsonError.localizedDescription);
+            return;
+        }
+        
+        // If we reach this point, we have successfully retrieved the JSON from the API
+        for (NSDictionary *repo in repos) { // 4
+            
+            NSString *repoName = repo[@"name"];
+            NSLog(@"repo: %@", repoName);
+        }
         
         
     }]; // 5
