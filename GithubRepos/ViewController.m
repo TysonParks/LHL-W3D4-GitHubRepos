@@ -13,8 +13,7 @@
 @property (weak, nonatomic) IBOutlet UITableView *myTableView;
 
 @property (strong, nonatomic) NSArray *repos;
-@property (strong, nonatomic) NSDictionary *repoDict;
-@property (strong, nonatomic) NSString *repoName;
+//@property (strong, nonatomic) NSString *repoName;
 
 @end
 
@@ -51,25 +50,37 @@
         
         // If we reach this point, we have successfully retrieved the JSON from the API
         for (NSDictionary *repo in self.repos) { // 4
-            self.repoDict = repo;
-            self.repoName = self.repoDict[@"name"];
-            NSLog(@"repo: %@", self.repoName);
+            NSString *repoName = repo[@"name"];
+//            NSLog(@"repo: %@", repoName);
+//            NSLog(@"repo count: %lu", (unsigned long)self.repos.count);
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                // This will run on the main queue
+                [self.myTableView reloadData];
+            }];
         }
         
         
     }]; // 5
     
     [dataTask resume]; // 6
-
+    
+    
+    
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return nil;
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
+    NSDictionary *repo = [self.repos objectAtIndex:indexPath.row];
+    cell.textLabel.text = repo[@"name"];
+    NSLog(@"repo: %@", cell.textLabel.text);
+    return cell;
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.repoDict.count;
+    
+    return self.repos.count;
 }
+
 
 
 
